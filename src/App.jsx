@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 import Layout from './Layout'
 import Dashboard from './Dashboard'
+import CRM from './CRM'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -9,7 +10,7 @@ function App() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [currentPage, setCurrentPage] = useState('dashboard')
+  const [currentPage, setCurrentPage] = useState('home')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -32,7 +33,8 @@ function App() {
   if (session) {
     return (
       <Layout session={session} currentPage={currentPage} setCurrentPage={setCurrentPage}>
-        {currentPage === 'dashboard' && <Dashboard />}
+        {currentPage === 'home' && <Dashboard />}
+        {currentPage === 'crm' && <CRM />}
       </Layout>
     )
   }
