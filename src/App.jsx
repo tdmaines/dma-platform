@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabase'
+import Layout from './Layout'
+import Dashboard from './Dashboard'
 
 function App() {
   const [session, setSession] = useState(null)
@@ -7,6 +9,7 @@ function App() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState('dashboard')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -26,17 +29,11 @@ function App() {
     setLoading(false)
   }
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-  }
-
   if (session) {
     return (
-      <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-        <h1>Welcome to DMA Platform</h1>
-        <p>Logged in as: {session.user.email}</p>
-        <button onClick={handleLogout}>Log Out</button>
-      </div>
+      <Layout session={session} currentPage={currentPage} setCurrentPage={setCurrentPage}>
+        {currentPage === 'dashboard' && <Dashboard />}
+      </Layout>
     )
   }
 
